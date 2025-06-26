@@ -7,7 +7,7 @@ import tkinter as tk
 from tkinter import messagebox
 from servicios.temperatura import tempCPU
 
-# Función para obtener la IP local
+# obtener la IP local
 def obIP():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -18,7 +18,7 @@ def obIP():
     except:
         return "127.0.0.1"
 
-# Función que corre el servidor
+# corre el servidor
 def iniciar_servidor(puerto):
     HOST = "0.0.0.0"
     ipLocal = obIP()
