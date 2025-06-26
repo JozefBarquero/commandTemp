@@ -15,6 +15,7 @@ try:
         s.connect((ip, PUERTO))
         s.sendall(comando.encode())
         respuesta = s.recv(1024).decode()
-        print(f"Respuesta del servidor: {respuesta}")
+        print("Temperatura del Servidor")
+        print(f"CPU: {respuesta} Cº")
 except Exception as e:
     print(f"Error: {e}")

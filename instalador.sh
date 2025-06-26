@@ -1,22 +1,22 @@
 #!/bin/bash
 
 if [ "$EUID" -ne 0 ]; then
-  echo "Por favor, ejecuta este script como administrador (sudo)."
-  exit 1
+  echo "Este script requiere privilegios de administrador. Pidiendo contraseña..."
+  exec sudo bash "$0" "$@"
 fi
 
 archivo="cliente.py"
-noExtension="${archivo%.py}"
-destino="/usr/local/bin/$noExtension"
+archivo2="server.py"
+destino="/usr/local/bin/temp"
 
-if [ ! -f "$archivo" ]; then
-  echo "No se encontró el archivo $archivo en el directorio actual."
+if [ ! -f "$archivo" ] || [ ! -f "$archivo2" ]; then
+  echo "No se encontró el archivo $archivo o $archivo2 en el directorio actual."
+  echo "Debes correr este .sh en el mismo directorio de $archivo y $archivo2"
   exit 1
 fi
 
 
 cp "$archivo" "$destino"
-
 chmod +x "$destino"
 
 echo "Archivo instalado correctamente en $destino"
