@@ -39,7 +39,7 @@ def iniciar_servidor(puerto):
                             _, ip_destino = datos.split()
                             if ip_destino == ipLocal:
                                 temperatura = tempCPU()
-                                conn.sendall(f"Temperatura: {temperatura}".encode())
+                                conn.sendall(f"{temperatura} ªC".encode())
                             else:
                                 conn.sendall(b"IP no coincide.")
                         except:
