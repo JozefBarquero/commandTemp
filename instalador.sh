@@ -28,3 +28,5 @@ if command -v ufw >/dev/null 2>&1; then
 else
   echo "ufw no está instalado, no se pudo habilitar el puerto 54001."
 fi
+
+echo "Instalacion completa."
