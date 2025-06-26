@@ -7,7 +7,7 @@ def tempCPU():
         if not temps:
             return "No se pudo obtener la temperatura del sistema."
 
-        resultado = "Temperaturas detectadas:\n\n"
+        resultado = "\n\n"
         for nombre, sensores in temps.items():
             resultado += f"- Sensor: {nombre}\n"
             for sensor in sensores:

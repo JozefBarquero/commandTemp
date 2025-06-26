@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-
 import socket
 import threading
 import tkinter as tk
-from tkinter import messagebox
 from servicios.temperatura import tempCPU
 
 # obtener la IP local
@@ -47,33 +45,27 @@ def iniciar_servidor(puerto):
                     else:
                         conn.sendall(b"Comando desconocido.")
     except Exception as e:
-        messagebox.showerror("Error", f"No se pudo iniciar el servidor:\n{e}")
+        print(f"No se pudo iniciar el servidor: {e}")
 
 # Interfaz gráfica
 def main_gui():
     root = tk.Tk()
     root.title("Servidor de Temperatura")
-    root.geometry("300x200")
+    root.geometry("200x110")
     root.resizable(False, False)
 
     ip = obIP()
+    puerto = 54001  
 
     tk.Label(root, text=f"IP local: {ip}").pack(pady=10)
     tk.Label(root, text="Puerto:").pack()
 
-    puerto_var = tk.StringVar(value="54001")
-    puerto_entry = tk.Entry(root, textvariable=puerto_var)
+    puerto_var = tk.StringVar(value=str(puerto))
+    puerto_entry = tk.Entry(root, textvariable=puerto_var, state='disabled')
     puerto_entry.pack()
 
-    def iniciar():
-        try:
-            puerto = int(puerto_var.get())
-            threading.Thread(target=iniciar_servidor, args=(puerto,), daemon=True).start()
-            messagebox.showinfo("Servidor", f"Servidor activo en {ip}:{puerto}")
-        except ValueError:
-            messagebox.showerror("Error", "Puerto inválido.")
+    threading.Thread(target=iniciar_servidor, args=(puerto,), daemon=True).start()
 
-    tk.Button(root, text="Iniciar servidor", command=iniciar).pack(pady=20)
 
     root.mainloop()
 
