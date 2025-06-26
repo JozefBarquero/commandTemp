@@ -6,14 +6,14 @@ def tempCPU():
         temps = psutil.sensors_temperatures()
         if not temps:
             return "No se pudo obtener la temperatura."
-        
+
+        resultado = ""
         for nombre, sensores in temps.items():
+            resultado += f"{nombre}:\n"
             for sensor in sensores:
-                if sensor.label == 'Package id 0' or sensor.label == '':
-                    return f"{sensor.current}"
-        
-        sensor = list(temps.values())[0][0]
-        return sensor.current
-        
+                resultado += f"  {sensor.label or 'sin etiqueta'}: {sensor.current} °C\n"
+
+        return resultado
     except Exception as e:
         return f"Error al obtener temperatura: {e}"
+

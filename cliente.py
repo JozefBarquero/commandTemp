@@ -14,8 +14,8 @@ try:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((ip, PUERTO))
         s.sendall(comando.encode())
-        respuesta = s.recv(1024).decode()
+        respuesta = s.recv(4096).decode()  
         print("Temperatura del Servidor")
-        print(f"CPU: {respuesta} Cº")
+        print(respuesta.strip())  
 except Exception as e:
     print(f"Error: {e}")
