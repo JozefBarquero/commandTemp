@@ -8,8 +8,8 @@ import time
 from servicios.temperatura import tempCPU
 
 
-TOKEN = "7577266313:AAHrsnGOV1TRgK9TPaWFfpl0-bxaWBpZb_E"
-CHAT_ID = "5386542308" 
+TOKEN = ""
+CHAT_ID = "" 
 UMBRAL_TEMP = 80.0  
 
 
