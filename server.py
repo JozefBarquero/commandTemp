@@ -3,9 +3,16 @@
 import socket
 import threading
 import tkinter as tk
+import requests
+import time
 from servicios.temperatura import tempCPU
 
-# obtener la IP local
+
+TOKEN = "7577266313:AAHrsnGOV1TRgK9TPaWFfpl0-bxaWBpZb_E"
+CHAT_ID = "5386542308" 
+UMBRAL_TEMP = 80.0  
+
+
 def obIP():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -16,7 +23,38 @@ def obIP():
     except:
         return "127.0.0.1"
 
-# corre el servidor
+
+def enviar_alerta(temp):
+    mensaje = f"🚨 ¡Alerta! La temperatura del CPU es {temp}°C"
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": mensaje}
+    try:
+        requests.post(url, data=payload)
+    except Exception as e:
+        print(f"Error al enviar mensaje de Telegram: {e}")
+
+
+def monitor_temperatura():
+    while True:
+        try:
+            temperatura = tempCPU()
+            if temperatura and float(temperatura) > UMBRAL_TEMP:
+                enviar_alerta(temperatura)
+        except Exception as e:
+            print(f"Error al verificar temperatura: {e}")
+        time.sleep(10)  # cada 10 segundos
+
+def enviar_mensaje_inicio():
+    ip = obIP()
+    mensaje = f"✅ Servidor iniciado correctamente en {ip}:54001"
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": mensaje}
+    try:
+        requests.post(url, data=payload)
+    except Exception as e:
+        print(f"Error al enviar mensaje de inicio: {e}")
+
+
 def iniciar_servidor(puerto):
     HOST = "0.0.0.0"
     ipLocal = obIP()
@@ -47,11 +85,11 @@ def iniciar_servidor(puerto):
     except Exception as e:
         print(f"No se pudo iniciar el servidor: {e}")
 
-# Interfaz gráfica
+
 def main_gui():
     root = tk.Tk()
     root.title("Servidor de Temperatura")
-    root.geometry("200x110")
+    root.geometry("300x110")
     root.resizable(False, False)
 
     ip = obIP()
@@ -63,9 +101,12 @@ def main_gui():
     puerto_var = tk.StringVar(value=str(puerto))
     puerto_entry = tk.Entry(root, textvariable=puerto_var, state='disabled')
     puerto_entry.pack()
+    
+    enviar_mensaje_inicio()  # Notifica al iniciar el servidor
+
 
     threading.Thread(target=iniciar_servidor, args=(puerto,), daemon=True).start()
-
+    threading.Thread(target=monitor_temperatura, daemon=True).start()
 
     root.mainloop()
 
